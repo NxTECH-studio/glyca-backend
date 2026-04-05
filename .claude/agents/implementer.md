@@ -44,7 +44,7 @@ bundle exec rspec <specファイル>
 ### Phase 4: 最終チェック
 1. 変更した全ファイルにLinter実行
    ```bash
-   git diff main --name-only --diff-filter=AM | grep '\.rb$' | xargs bundle exec rubocop
+   git diff main --name-only --diff-filter=AM | grep '\.rb$' | xargs -r bundle exec rubocop
    ```
 2. 関連する全テスト実行
    ```bash

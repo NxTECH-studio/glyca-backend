@@ -23,7 +23,7 @@ description: PR作成
 **変更したファイルのみ**に対してRuboCopを実行:
 
 ```bash
-git diff main --name-only --diff-filter=AM | grep '\.rb$' | xargs bundle exec rubocop
+git diff main --name-only --diff-filter=AM | grep '\.rb$' | xargs -r bundle exec rubocop
 ```
 
 **🚨 Linter警告・エラーへの対応（例外なし）🚨**
@@ -46,30 +46,30 @@ git diff main --name-only --diff-filter=AM | grep '\.rb$' | xargs bundle exec ru
 
 **変更したファイルの警告がすべて解消された場合のみ**: 次のステップへ進む
 
-### 4. PR説明文の生成
+### 4. スキーマ変更の検出
+
+`git diff main -- db/Schemafile` で差分がある場合、次のステップのPR説明文「影響範囲・懸念点」にスキーマ変更の詳細を含める:
+- 追加・変更・削除されたテーブル/カラム
+- `bundle exec ridgepole --apply` の実行が必要な旨を記載
+
+### 5. PR説明文の生成
 `.github/pull_request_template.md` に従って作成:
 
 **必須項目**:
 - **概要**: 背景、目的、何をしたか
 - **細かい変更点**: 主要な変更をリストで記述
-- **影響範囲・懸念点**: 既存機能への影響、パフォーマンス懸念、Ridgepoleスキーマ変更の有無
+- **影響範囲・懸念点**: 既存機能への影響、パフォーマンス懸念、Ridgepoleスキーマ変更の有無（Step 4の結果を反映）
 
 **任意項目**:
 - **その他**: 関連Issue・PR、参考リンク、レビュー時に見てほしいポイント
 
-### 5. PR作成
+### 6. PR作成
 
 ```bash
 gh pr create --base main --title "タイトル（日本語）" --body "説明文" --assignee "@me"
 ```
 
 作成されたPR URLを表示
-
-### 6. スキーマ変更の検出
-
-`git diff main -- db/Schemafile` で差分がある場合、PR説明文の「影響範囲・懸念点」にスキーマ変更の詳細を含める:
-- 追加・変更・削除されたテーブル/カラム
-- `bundle exec ridgepole --apply` の実行が必要な旨を記載
 
 ## 注意事項
 - タイトル・本文は**日本語**
