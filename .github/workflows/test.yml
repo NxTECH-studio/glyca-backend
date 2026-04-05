@@ -44,4 +44,4 @@ jobs:
           bundle exec ridgepole -c config/database.yml -E test --apply -f db/Schemafile
 
       - name: Run tests
-        run: bin/rspec
+        run: bundle exec rspec
