@@ -1,0 +1,5 @@
+# frozen_string_literal: true
+
+# Ridgepole schema definition
+# Add table definitions here or require separate files:
+#   require "tables/users.rb"
