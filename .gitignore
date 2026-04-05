@@ -29,3 +29,6 @@ spec/examples.txt
 
 # SimpleCov
 /coverage/
+
+# Claude Code
+.claude/memory/
