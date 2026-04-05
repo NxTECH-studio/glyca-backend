@@ -26,6 +26,10 @@ jobs:
       
   lint:
     runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    permissions:
+      contents: read
+      pull-requests: write
     env:
       RUBOCOP_CACHE_ROOT: tmp/rubocop
     steps:
@@ -47,6 +51,11 @@ jobs:
           restore-keys: |
             rubocop-${{ runner.os }}-${{ env.DEPENDENCIES_HASH }}-
 
-      - name: Lint code for consistent style
-        run: bin/rubocop -f github
+      - name: Run RuboCop with reviewdog
+        uses: reviewdog/action-rubocop@v2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: github-pr-review
+          skip_install: true
+          use_bundler: true
 
