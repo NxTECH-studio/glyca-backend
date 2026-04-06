@@ -16,44 +16,73 @@ Rails 8.1 API専用バックエンドアプリケーション。
 | テスト | RSpec, FactoryBot |
 | Lint | RuboCop |
 
-## セットアップ
+## セットアップ（Docker）
+
+Docker を使って環境構築できます。PostgreSQL を含めたすべての依存をコンテナ内で完結させます。
 
 ```bash
-# 依存関係のインストール
-bundle install
+# 初回セットアップ（ビルド → 起動 → DB作成 → スキーマ適用）
+make setup
 
-# DB作成 & スキーマ適用
+# 2回目以降の起動
+make up
+
+# 停止
+make down
+```
+
+> **前提条件**: Docker と Docker Compose がインストールされていること。
+
+### ローカル直接セットアップ
+
+Docker を使わない場合は、PostgreSQL をローカルにインストールした上で以下を実行してください。
+
+```bash
+bundle install
 bin/rails db:create
 bundle exec ridgepole -c config/database.yml -E development --apply -f db/Schemafile
 bundle exec ridgepole -c config/database.yml -E test --apply -f db/Schemafile
-
-# サーバー起動
 bin/rails server
 ```
 
 ### 環境変数
 
-| 変数名 | 説明 |
-|---|---|
-| `DB_HOST` | PostgreSQL ホスト |
-| `DB_USERNAME` | PostgreSQL ユーザー名 |
-| `DB_PASSWORD` | PostgreSQL パスワード |
+| 変数名 | 説明 | Docker時のデフォルト |
+|---|---|---|
+| `DB_HOST` | PostgreSQL ホスト | `db`（コンテナ名） |
+| `DB_USERNAME` | PostgreSQL ユーザー名 | `glyca` |
+| `DB_PASSWORD` | PostgreSQL パスワード | `password` |
 
-## 開発コマンド
+## 開発コマンド（Makefile）
+
+`make help` で一覧を確認できます。主要なコマンド:
 
 ```bash
-# テスト
+make setup            # 初回セットアップ
+make up / make down   # コンテナ起動 / 停止
+make console          # Rails コンソール
+make sh               # コンテナ内シェル
+make rspec            # テスト実行（make rspec ARGS=spec/models/ で絞り込み可）
+make rubocop          # RuboCop チェック
+make rubocop/fix      # RuboCop 安全な自動修正
+make rubocop/fix-all  # RuboCop 全自動修正（unsafe 含む）
+make brakeman         # セキュリティ解析
+make bundler-audit    # Gem 脆弱性スキャン
+make db/schema/apply  # Ridgepole スキーマ適用
+make db/reset         # DB再作成
+make logs             # ログ表示
+make clean            # コンテナ・ボリューム全削除
+```
+
+Docker を使わない場合の直接コマンド:
+
+```bash
 bundle exec rspec
-
-# Lint
 bundle exec rubocop
-
-# セキュリティ
 bin/brakeman --no-pager
 bin/bundler-audit
-
-# スキーマ変更の適用（※ Rails マイグレーションは使わない）
 bundle exec ridgepole -c config/database.yml -E development --apply -f db/Schemafile
+bundle exec ridgepole -c config/database.yml -E test --apply -f db/Schemafile
 ```
 
 ## 開発フロー（Claude Code）
