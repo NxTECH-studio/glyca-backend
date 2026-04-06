@@ -8,29 +8,52 @@ Glyca Backend — Rails 8.1 API専用アプリケーション (Ruby 4.0.2, Postg
 
 ## よく使うコマンド
 
+開発環境は Docker（`compose.yml`）で構築。Makefile 経由でコマンドを実行する。
+
 ```bash
-# サーバー起動
-bin/rails server
+# Docker操作
+make setup                               # 初回セットアップ（ビルド→起動→DB作成→スキーマ適用）
+make up                                  # コンテナ起動
+make down                                # コンテナ停止
 
 # テスト
-bundle exec rspec                        # 全テスト実行
-bundle exec rspec spec/models/           # ディレクトリ単位で実行
-bundle exec rspec spec/models/user_spec.rb       # ファイル単位で実行
-bundle exec rspec spec/models/user_spec.rb:42    # 行番号指定で実行
+make rspec                               # 全テスト実行
+make rspec ARGS=spec/models/             # ディレクトリ単位で実行
+make rspec ARGS=spec/models/user_spec.rb # ファイル単位で実行
+make rspec ARGS=spec/models/user_spec.rb:42  # 行番号指定で実行
 
 # Lint
-bundle exec rubocop                      # 全チェック
-bundle exec rubocop -a                   # 安全な自動修正
-bundle exec rubocop -A                   # 全自動修正（unsafe含む）
+make rubocop                             # 全チェック
+make rubocop/fix                         # 全自動修正（unsafe含む）
 
 # セキュリティ
-bin/brakeman --no-pager                  # 静的解析
-bin/bundler-audit                        # Gem脆弱性スキャン
+make brakeman                            # 静的解析
+make bundler-audit                       # Gem脆弱性スキャン
 
 # データベース
+make db/create                           # DB作成
+make db/schema/apply                     # Ridgepoleスキーマ適用（dev + test）
+make db/reset                            # DBドロップ→再作成→スキーマ適用
+
+# その他
+make console                             # Railsコンソール
+make sh                                  # コンテナ内シェル
+make logs                                # ログ表示
+make help                                # コマンド一覧
+```
+
+### Docker を使わない場合（ローカル直接実行）
+
+```bash
+bin/rails server
+bundle exec rspec
+bundle exec rubocop
+bundle exec rubocop -A
+bin/brakeman --no-pager
+bin/bundler-audit
 bin/rails db:create
-bundle exec ridgepole -c config/database.yml -E development --apply -f db/Schemafile  # スキーマ適用
-bundle exec ridgepole -c config/database.yml -E test --apply -f db/Schemafile         # スキーマ適用（テスト）
+bundle exec ridgepole -c config/database.yml -E development --apply -f db/Schemafile
+bundle exec ridgepole -c config/database.yml -E test --apply -f db/Schemafile
 ```
 
 ## アーキテクチャ
@@ -39,8 +62,9 @@ bundle exec ridgepole -c config/database.yml -E test --apply -f db/Schemafile   
 - **スキーマ管理**: Railsマイグレーションではなく [Ridgepole](https://github.com/ridgepole/ridgepole) を使用。テーブル定義は `db/Schemafile` に記述（またはサブファイルをrequire）。
 - **バックグラウンドジョブ**: Solid Queue（DBベースのActive Jobアダプタ）。
 - **キャッシュ**: Solid Cache（DBベースのRails.cacheアダプタ）。
+- **開発環境**: Docker Compose（`compose.yml` + `Dockerfile.dev`）。Makefile でコマンドをラップ。
 - **デプロイ**: Kamal（Dockerベース）。`config/deploy.yml` と `Dockerfile` を参照。
-- **DB接続**: 環境変数 `DB_HOST`, `DB_USERNAME`, `DB_PASSWORD` で設定。
+- **DB接続**: 環境変数 `DB_HOST`, `DB_USERNAME`, `DB_PASSWORD` で設定。Docker環境では `compose.yml` で自動設定。
 
 ## コードスタイル (RuboCop)
 
