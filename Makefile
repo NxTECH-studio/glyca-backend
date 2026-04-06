@@ -31,8 +31,9 @@ ps: ## コンテナ状態を表示
 .PHONY: setup db/create db/schema/apply db/reset
 
 setup: build ## 初回セットアップ（ビルド→起動→DB作成→スキーマ適用）
-	docker compose up -d
-	docker compose exec web bin/rails db:create || true
+	docker compose up -d --wait
+	docker compose exec web bundle install
+	docker compose exec web bin/rails db:create || true  # DB既存の場合を許容
 	docker compose exec web bundle exec ridgepole -c config/database.yml -E development --apply -f db/Schemafile
 	docker compose exec web bundle exec ridgepole -c config/database.yml -E test --apply -f db/Schemafile
 
@@ -64,7 +65,7 @@ bundle: ## bundle install
 # Test / Lint
 # --------------------------------------------------
 
-.PHONY: rspec rubocop rubocop/fix brakeman bundler-audit
+.PHONY: rspec rubocop rubocop/fix rubocop/fix-all brakeman bundler-audit
 
 rspec: ## RSpecテスト実行
 	docker compose exec web bundle exec rspec $(ARGS)
@@ -72,7 +73,10 @@ rspec: ## RSpecテスト実行
 rubocop: ## RuboCopチェック
 	docker compose exec web bundle exec rubocop
 
-rubocop/fix: ## RuboCop自動修正
+rubocop/fix: ## RuboCop安全な自動修正
+	docker compose exec web bundle exec rubocop -a
+
+rubocop/fix-all: ## RuboCop全自動修正（unsafe含む）
 	docker compose exec web bundle exec rubocop -A
 
 brakeman: ## Brakemanセキュリティ解析

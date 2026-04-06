@@ -64,7 +64,8 @@ make console          # Rails コンソール
 make sh               # コンテナ内シェル
 make rspec            # テスト実行（make rspec ARGS=spec/models/ で絞り込み可）
 make rubocop          # RuboCop チェック
-make rubocop/fix      # RuboCop 自動修正
+make rubocop/fix      # RuboCop 安全な自動修正
+make rubocop/fix-all  # RuboCop 全自動修正（unsafe 含む）
 make brakeman         # セキュリティ解析
 make bundler-audit    # Gem 脆弱性スキャン
 make db/schema/apply  # Ridgepole スキーマ適用

@@ -24,7 +24,8 @@ make rspec ARGS=spec/models/user_spec.rb:42  # 行番号指定で実行
 
 # Lint
 make rubocop                             # 全チェック
-make rubocop/fix                         # 全自動修正（unsafe含む）
+make rubocop/fix                         # 安全な自動修正
+make rubocop/fix-all                     # 全自動修正（unsafe含む）
 
 # セキュリティ
 make brakeman                            # 静的解析
