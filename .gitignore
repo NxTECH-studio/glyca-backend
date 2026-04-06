@@ -30,5 +30,8 @@ spec/examples.txt
 # SimpleCov
 /coverage/
 
+# IDE
+.idea/
+
 # Claude Code
 .claude/memory/

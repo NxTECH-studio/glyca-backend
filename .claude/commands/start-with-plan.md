@@ -16,11 +16,12 @@ argument-hint: <docs/tasks内のファイルパス>
 
 ### 主な流れ
 1. ドキュメント読み込み
-2. Todoリスト作成（TodoWrite必須）
-3. 実装ループ（タスクごとに `in_progress` → 実装 → Linter → `completed`）
-4. テスト実装（Model/Service/Job/Mailer/Request spec）
+2. テストケース設計（実装前に必須）
+3. Todoリスト作成（TaskCreate必須）
+4. 実装・テストループ（機能単位でペア実装）
 5. 最終チェック（Linter全実行、全テスト）
-6. 完了報告
+6. コード品質チェック（/simplify）
+7. 完了報告
 
 ### Linter実行
 ```bash
@@ -33,8 +34,9 @@ bundle exec rspec <対象specファイル>
 ```
 
 ### スキーマ変更がある場合
-`db/Schemafile` を編集後、テスト用DBに適用:
+`db/Schemafile` を編集後、両環境に適用:
 ```bash
+bundle exec ridgepole -c config/database.yml -E development --apply -f db/Schemafile
 bundle exec ridgepole -c config/database.yml -E test --apply -f db/Schemafile
 ```
 
@@ -48,6 +50,7 @@ bundle exec ridgepole -c config/database.yml -E test --apply -f db/Schemafile
 ✅ テスト: XX examples, 0 failures
 ✅ コミット: すべての変更がコミット済み（未コミットファイルなし）
 ### 次のステップ
+- `/code-review`
 - `/pr-creation`
 ```
 
@@ -66,9 +69,11 @@ bundle exec ridgepole -c config/database.yml -E test --apply -f db/Schemafile
 
 ## ワークフロー
 ```
-実装方針をdocs/tasks/に作成
+/plan-from-notion <Notion URL>   # 実装方針作成
 ↓
 /start-with-plan <xxx.md>        # 実装開始（このコマンド）
+↓
+/code-review                     # レビュー
 ↓
 /pr-creation                     # PR作成
 ```
