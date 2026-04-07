@@ -62,6 +62,9 @@ bundle exec ridgepole -c config/database.yml -E test --apply -f db/Schemafile
 - **デフォルトブランチ**: `develop`（開発用）。PRのベースブランチは基本的に `develop` を指定する。
 - **本番ブランチ**: `main`（ブランチ保護あり、直接push禁止）。リリース時に `develop → main` へのPRをマージする。
 - **featureブランチ**: `feat/xxx` などのブランチを `develop` から切って作業し、`develop` へPRを出す。
+- **マージ方法**:
+  - `develop` へのPR → **Squash merge**（コミット履歴をまとめる）
+  - `main` へのPR（リリース） → **Merge commit**（マージコミットを残す）
 - **リリースPR自動生成**: `develop` へのpush時に GitHub Actions で `develop → main` へのリリースPRが自動生成・更新される。
 
 ## アーキテクチャ
