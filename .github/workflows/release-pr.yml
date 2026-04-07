@@ -27,4 +27,5 @@ jobs:
             --repo-owner ${{ github.repository_owner }} \
             --repo-name ${{ github.event.repository.name }} \
             --head-branch develop \
-            --base-branch main
+            --base-branch main \
+            --template-path .github/release-pr-template.md
