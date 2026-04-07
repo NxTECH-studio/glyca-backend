@@ -6,10 +6,10 @@ description: 変更コードの自動レビュー
 
 ## 現在の状況
 - **現在のブランチ**: `{{bash: git rev-parse --abbrev-ref HEAD}}`
-- **Base ブランチ**: `main`
+- **Base ブランチ**: `develop`
 - **変更ファイル**:
 ```
-{{bash: git diff main --name-only | head -30}}
+{{bash: git diff develop --name-only | head -30}}
 ```
 
 ## 実行手順
@@ -35,7 +35,7 @@ description: 変更コードの自動レビュー
 ```
 あなたはセキュリティと規約の専門家です。
 
-以下のファイルの変更（git diff main...HEAD）をレビューしてください。
+以下のファイルの変更（git diff develop...HEAD）をレビューしてください。
 
 ## チェック項目
 
@@ -72,7 +72,7 @@ description: 変更コードの自動レビュー
 ```
 あなたはパフォーマンス、設計、コード品質の専門家です。
 
-以下のファイルの変更（git diff main...HEAD）をレビューしてください。
+以下のファイルの変更（git diff develop...HEAD）をレビューしてください。
 
 ## 重要: プロジェクトのRubocop設定（無効化ルール）
 以下のルールはプロジェクトで意図的に無効化されているため、**これらに関する指摘はしないこと**：
@@ -120,7 +120,7 @@ description: 変更コードの自動レビュー
 ```
 あなたはテストの専門家です。
 
-以下のファイルの変更（git diff main...HEAD）をレビューしてください。
+以下のファイルの変更（git diff develop...HEAD）をレビューしてください。
 
 ## プロジェクトのテスト環境
 - RSpec + FactoryBot（create, build 等はメソッドとして直接利用可能）
@@ -152,7 +152,7 @@ description: 変更コードの自動レビュー
 ```
 あなたは可読性・命名・Linterの専門家です。
 
-以下のファイルの変更（git diff main...HEAD）をレビューしてください。
+以下のファイルの変更（git diff develop...HEAD）をレビューしてください。
 
 ## 重要: プロジェクトのRubocop設定（無効化ルール）
 以下のルールはプロジェクトで意図的に無効化されているため、**これらに関する指摘はしないこと**：
@@ -172,7 +172,7 @@ description: 変更コードの自動レビュー
 ## Linter チェック
 変更された .rb ファイルに対して RuboCop を実行してください：
 
-git diff main --name-only --diff-filter=AM | grep '\.rb$' | xargs bundle exec rubocop
+git diff develop --name-only --diff-filter=AM | grep '\.rb$' | xargs bundle exec rubocop
 
 ## 出力形式
 ### 命名・可読性
