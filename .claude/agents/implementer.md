@@ -82,7 +82,7 @@ bundle exec rspec spec/path/to/spec_file.rb
 
 変更ファイルに対して RuboCop を実行:
 ```bash
-git diff main --name-only --diff-filter=AM | grep '\.rb$' | xargs bundle exec rubocop
+git diff develop --name-only --diff-filter=AM | grep '\.rb$' | xargs bundle exec rubocop
 ```
 - **警告0件になるまで修正**: 例外なし、すべて解消してから次へ
 

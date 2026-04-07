@@ -6,7 +6,7 @@ description: PR作成
 
 ## 現在の状況
 - **現在のブランチ**: `{{bash: git rev-parse --abbrev-ref HEAD}}`
-- **Base ブランチ**: `main`
+- **Base ブランチ**: `develop`
 
 ## 実行手順
 
@@ -16,20 +16,20 @@ description: PR作成
 - **コミット済み**: 次へ
 
 ### 2. 変更内容の分析
-- `git diff main...HEAD` 確認
-- コミット履歴確認（`git log main..HEAD`）
+- `git diff develop...HEAD` 確認
+- コミット履歴確認（`git log develop..HEAD`）
 
 ### 3. Linter最終確認（厳格）
 **変更したファイルのみ**に対してRuboCopを実行:
 
 ```bash
-git diff main --name-only --diff-filter=AM | grep '\.rb$' | xargs -r bundle exec rubocop
+git diff develop --name-only --diff-filter=AM | grep '\.rb$' | xargs -r bundle exec rubocop
 ```
 
 **🚨 Linter警告・エラーへの対応（例外なし）🚨**
 
 **重要: 変更したファイルの警告のみ対象**
-- 上記コマンドは `git diff main --name-only --diff-filter=AM` で**このブランチで変更したファイルのみ**を対象
+- 上記コマンドは `git diff develop --name-only --diff-filter=AM` で**このブランチで変更したファイルのみ**を対象
 - 変更していないファイルの警告は無視してOK
 - **変更したファイルに出る警告・エラーはすべて修正必須**
 
@@ -48,7 +48,7 @@ git diff main --name-only --diff-filter=AM | grep '\.rb$' | xargs -r bundle exec
 
 ### 4. スキーマ変更の検出
 
-`git diff main -- db/Schemafile` で差分がある場合、次のステップのPR説明文「影響範囲・懸念点」にスキーマ変更の詳細を含める:
+`git diff develop -- db/Schemafile` で差分がある場合、次のステップのPR説明文「影響範囲・懸念点」にスキーマ変更の詳細を含める:
 - 追加・変更・削除されたテーブル/カラム
 - `bundle exec ridgepole --apply` の実行が必要な旨を記載
 
@@ -66,7 +66,7 @@ git diff main --name-only --diff-filter=AM | grep '\.rb$' | xargs -r bundle exec
 ### 6. PR作成
 
 ```bash
-gh pr create --base main --title "タイトル（日本語）" --body "説明文" --assignee "@me"
+gh pr create --base develop --title "タイトル（日本語）" --body "説明文" --assignee "@me"
 ```
 
 作成されたPR URLを表示
