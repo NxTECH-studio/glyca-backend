@@ -3,5 +3,5 @@ Release {{ .Year }}-{{ .Month }}-{{ .Date }}
 
 | PR | Title | Author |
 |---|-------|--------|
-{{ range $i, $pull := .Pulls }}| #{{ $pull.Number }} | {{ $pull.Title }} | @{{ $pull.User.Login }} |
+{{ range $i, $pull := .Pulls }}| #{{ $pull.Number }} | {{ $pull.Title }} | {{ $pull.User.Login }} |
 {{ end }}
